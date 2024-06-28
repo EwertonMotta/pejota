@@ -4,7 +4,6 @@ namespace App\Filament\App\Resources;
 
 use AbdelhamidErrahmouni\FilamentMonacoEditor\MonacoEditor;
 use App\Filament\App\Resources\NoteResource\Pages;
-use App\Filament\App\Resources\NoteResource\RelationManagers;
 use App\Models\Note;
 use App\Tables\Columns\BlockTypesBadge;
 use Filament\Forms;
@@ -19,9 +18,8 @@ class NoteResource extends Resource
     protected static ?string $model = Note::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
+
     protected static ?int $navigationSort = 1;
-
-
 
     public static function form(Form $form): Form
     {
@@ -96,7 +94,7 @@ class NoteResource extends Resource
                                     ->live(),
 
                                 MonacoEditor::make('content')
-                                    ->language(fn($get) => ($get('language') ?? 'html'))
+                                    ->language(fn ($get) => ($get('language') ?? 'html'))
                                     ->disablePreview(true),
                             ]),
 

@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Filament\App\Resources\TaskResource;
-use App\Filament\App\Resources\TaskResource\Pages\CreateTask;
 use App\Filament\App\Resources\WorkSessionResource;
 use App\Filament\App\Resources\WorkSessionResource\Pages\CreateWorkSession;
 use Filament\Actions\Action;
@@ -17,6 +16,7 @@ use Livewire\Component;
 class TopNavigateAction extends Component implements HasActions
 {
     use InteractsWithActions;
+
     public function render()
     {
         return view('livewire.top-navigate-action');
@@ -39,7 +39,7 @@ class TopNavigateAction extends Component implements HasActions
                 TaskResource::getUrl(panel: 'create')
             );
     }
-    
+
     public function createSession(array|string $name = 'Create Session'): ?Action
     {
         return Action::make($name)
