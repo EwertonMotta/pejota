@@ -49,7 +49,8 @@ class TagResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type')
@@ -63,6 +64,7 @@ class TagResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('name', 'asc')
             ->filters([
                 //
             ])
@@ -72,7 +74,7 @@ class TagResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    //                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -99,6 +101,7 @@ class TagResource extends Resource
         return [
             RelationManagers\TasksRelationManager::class,
             RelationManagers\ProjectsRelationManager::class,
+            RelationManagers\NotesRelationManager::class,
         ];
     }
 

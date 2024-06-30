@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Filament\App\Resources\NoteResource;
 use App\Filament\App\Resources\TaskResource;
 use App\Filament\App\Resources\WorkSessionResource;
 use App\Filament\App\Resources\WorkSessionResource\Pages\CreateWorkSession;
@@ -49,6 +50,20 @@ class TopNavigateAction extends Component implements HasActions
             ->label('Create Session')
             ->icon(WorkSessionResource::getNavigationIcon())
             ->color(Color::Amber)
+            ->url(
+                CreateWorkSession::getUrl(panel: 'create')
+            );
+    }
+
+    public function createNote(array|string $name = 'Create Note'): ?Action
+    {
+        return Action::make($name)
+            ->hiddenLabel()
+            ->size(ActionSize::Small)
+            ->tooltip('Create a new Note')
+            ->label('Create Note')
+            ->icon(NoteResource::getNavigationIcon())
+            ->color(Color::Cyan)
             ->url(
                 CreateWorkSession::getUrl(panel: 'create')
             );
