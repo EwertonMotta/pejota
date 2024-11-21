@@ -10,7 +10,6 @@ use App\Filament\App\Resources\InvoiceResource\RelationManagers;
 use App\Helpers\PejotaHelper;
 use App\Models\Invoice;
 use App\Models\Product;
-use App\Models\TabelaPreco;
 use App\Services\InvoiceService;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -18,8 +17,6 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class InvoiceResource extends Resource
@@ -46,14 +43,14 @@ class InvoiceResource extends Resource
                 Forms\Components\TextInput::make('number')
                     ->translateLabel()
                     ->required()
-                    ->default(fn() => CompanySettingsEnum::DOCS_INVOICE_NUMBER_LAST->getNextDocNumberFormated())
-                    ->unique(ignorable: fn($record) => $record?->isDirty('number') ? null : $record),
+                    ->default(fn () => CompanySettingsEnum::DOCS_INVOICE_NUMBER_LAST->getNextDocNumberFormated())
+                    ->unique(ignorable: fn ($record) => $record?->isDirty('number') ? null : $record),
                 Forms\Components\Select::make('status')
                     ->options(InvoiceStatusEnum::class)
-                    ->default(fn() => InvoiceStatusEnum::DRAFT)
+                    ->default(fn () => InvoiceStatusEnum::DRAFT)
                     ->required()
                     ->live()
-                    ->afterStateUpdated(fn(Forms\Set $set, $state) => $state == InvoiceStatusEnum::PAID->value ? $set('payment_date', now()->format(PejotaHelper::getUserDateFormat())) : null),
+                    ->afterStateUpdated(fn (Forms\Set $set, $state) => $state == InvoiceStatusEnum::PAID->value ? $set('payment_date', now()->format(PejotaHelper::getUserDateFormat())) : null),
                 Forms\Components\DatePicker::make('due_date')
                     ->translateLabel()
                     ->date(),
@@ -61,7 +58,7 @@ class InvoiceResource extends Resource
                     ->translateLabel()
                     ->date()
                     ->live()
-                    ->required(fn(Forms\Get $get) => $get('status') == InvoiceStatusEnum::PAID->value),
+                    ->required(fn (Forms\Get $get) => $get('status') == InvoiceStatusEnum::PAID->value),
                 Forms\Components\Select::make('client_id')
                     ->translateLabel()
                     ->required()
@@ -82,7 +79,7 @@ class InvoiceResource extends Resource
                 Forms\Components\TextInput::make('discount')
                     ->numeric()
                     ->live()
-                    ->afterStateUpdated(fn(Forms\Set $set, Forms\Get $get) => self::calcItemTotal($get, $set)),
+                    ->afterStateUpdated(fn (Forms\Set $set, Forms\Get $get) => self::calcItemTotal($get, $set)),
                 Forms\Components\TextInput::make('total')
                     ->required()
                     ->numeric()
@@ -138,18 +135,18 @@ class InvoiceResource extends Resource
                             ->required()
                             ->numeric()
                             ->live()
-                            ->afterStateUpdated(fn(Forms\Set $set, Forms\Get $get) => self::calcItemTotal($get, $set)),
+                            ->afterStateUpdated(fn (Forms\Set $set, Forms\Get $get) => self::calcItemTotal($get, $set)),
                         Forms\Components\TextInput::make('price')
                             ->translateLabel()
                             ->required()
                             ->numeric()
                             ->live()
-                            ->afterStateUpdated(fn(Forms\Set $set, Forms\Get $get) => self::calcItemTotal($get, $set)),
+                            ->afterStateUpdated(fn (Forms\Set $set, Forms\Get $get) => self::calcItemTotal($get, $set)),
                         Forms\Components\TextInput::make('discount')
                             ->translateLabel()
                             ->numeric()
                             ->live()
-                            ->afterStateUpdated(fn(Forms\Set $set, Forms\Get $get) => self::calcItemTotal($get, $set)),
+                            ->afterStateUpdated(fn (Forms\Set $set, Forms\Get $get) => self::calcItemTotal($get, $set)),
                         Forms\Components\TextInput::make('total')
                             ->translateLabel()
                             ->required()
@@ -161,7 +158,7 @@ class InvoiceResource extends Resource
                     ])
                     ->deleteAction(function (Forms\Components\Actions\Action $action) {
                         // call cal total after delete a row item of the repeater
-                        return $action->after(fn(Forms\Set $set, Forms\Get $get) => self::calcInvoiceTotal($get, $set));
+                        return $action->after(fn (Forms\Set $set, Forms\Get $get) => self::calcInvoiceTotal($get, $set));
                     }),
             ]);
     }
@@ -182,15 +179,15 @@ class InvoiceResource extends Resource
                     ->wrapHeader()
                     ->alignCenter()
                     ->sortable()
-                    ->icon(fn($record) => match ($record->is_overdue) {
+                    ->icon(fn ($record) => match ($record->is_overdue) {
                         true => 'heroicon-o-exclamation-circle',
                         default => null,
                     })
-                    ->color(fn($record) => match ($record->is_overdue) {
+                    ->color(fn ($record) => match ($record->is_overdue) {
                         true => 'danger',
                         default => null,
                     })
-                    ->getStateUsing(fn($record) => $record->is_overdue),
+                    ->getStateUsing(fn ($record) => $record->is_overdue),
                 Tables\Columns\TextColumn::make('number')
                     ->translateLabel()
                     ->searchable(),
@@ -250,7 +247,7 @@ class InvoiceResource extends Resource
                         ->label('PDF')
                         ->color('info')
                         ->icon('heroicon-o-document-arrow-down')
-                        ->action(fn($record) => self::generatePdf($record)),
+                        ->action(fn ($record) => self::generatePdf($record)),
                 ]),
             ])
             ->bulkActions([
@@ -263,7 +260,7 @@ class InvoiceResource extends Resource
     public static function getRelations(): array
     {
         return [
-//            RelationManagers\ItemRelationManager::class,
+            //            RelationManagers\ItemRelationManager::class,
         ];
     }
 
@@ -279,12 +276,12 @@ class InvoiceResource extends Resource
 
     public static function calcItemTotal(Forms\Get $get, Forms\Set $set)
     {
-        $price = (float)str_replace(',', '.', $get('price'));
-        $qty = (float)$get('quantity');
+        $price = (float) str_replace(',', '.', $get('price'));
+        $qty = (float) $get('quantity');
 
         $total = $price * $qty;
 
-        $discount = (float)$get('discount');
+        $discount = (float) $get('discount');
 
         $total = round($total - $discount, 2);
 
@@ -313,7 +310,7 @@ class InvoiceResource extends Resource
             ->pluck('total')
             ->sum();
 
-        $discountValue = (float)$get($discountComponent);
+        $discountValue = (float) $get($discountComponent);
         $invoiceValue = $totalInvoice - $discountValue;
 
         $set(
@@ -325,8 +322,8 @@ class InvoiceResource extends Resource
     public static function generatePdf(Invoice $invoice): StreamedResponse
     {
         return response()->streamDownload(function () use ($invoice) {
-            $pdf = (new InvoiceService())->generatePdf($invoice);
+            $pdf = (new InvoiceService)->generatePdf($invoice);
             echo $pdf->stream();
-        }, 'invoice_' . $invoice->number . '.pdf');
+        }, 'invoice_'.$invoice->number.'.pdf');
     }
 }

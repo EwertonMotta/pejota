@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
-use App\Enums\InvoiceStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use NunoMazer\Samehouse\BelongsToTenants;
 
 class Account extends Model
 {
-    use HasFactory, BelongsToTenants;
+    use BelongsToTenants, HasFactory;
 
     protected $guarded = ['id'];
 

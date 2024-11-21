@@ -5,7 +5,6 @@ namespace App\Filament\App\Widgets;
 use App\Enums\InvoiceStatusEnum;
 use App\Helpers\PejotaHelper;
 use App\Models\Invoice;
-use App\Models\WorkSession;
 use Carbon\CarbonImmutable;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -19,15 +18,15 @@ class InvoicesOverview extends BaseWidget
 
         // TODO improve and centralize the money handling
         $totalOpened = Invoice::where('status', InvoiceStatusEnum::SENT->value)
-                    ->sum('total') / 100;
+            ->sum('total') / 100;
 
         $totalOverdue = Invoice::where('status', InvoiceStatusEnum::SENT->value)
-                    ->where('due_date', '<', $today)
-                    ->sum('total') / 100;
+            ->where('due_date', '<', $today)
+            ->sum('total') / 100;
 
         $totalPaid = Invoice::where('status', InvoiceStatusEnum::PAID->value)
-                    ->where('payment_date', '>=', $today->startOfMonth())
-                    ->sum('total') / 100;
+            ->where('payment_date', '>=', $today->startOfMonth())
+            ->sum('total') / 100;
         $fmt = \NumberFormatter::create(PejotaHelper::getUserLocate(), \NumberFormatter::CURRENCY);
 
         return [
