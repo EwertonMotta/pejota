@@ -55,8 +55,6 @@ class WorkSession extends Model
 
     /**
      * Finish the WorkSession that is running
-     *
-     * @return bool
      */
     public function finish(): bool
     {

@@ -14,7 +14,7 @@ use Spatie\Tags\HasTags;
 
 class Invoice extends Model
 {
-    use HasFactory, BelongsToTenants, HasTags;
+    use BelongsToTenants, HasFactory, HasTags;
 
     protected $guarded = ['id'];
 
@@ -29,8 +29,7 @@ class Invoice extends Model
     protected function isOverdue(): Attribute
     {
         return Attribute::make(
-            get: fn() =>
-                $this->due_date->isPast() && $this->status != InvoiceStatusEnum::PAID,
+            get: fn () => $this->due_date->isPast() && $this->status != InvoiceStatusEnum::PAID,
         );
     }
 
@@ -38,6 +37,7 @@ class Invoice extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
