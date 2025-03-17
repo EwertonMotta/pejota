@@ -16,7 +16,7 @@ class CreateTask extends CreateRecord
         if (request()->get('parent')) {
             $task = Task::find(request()->get('parent'));
 
-            $this->data['title'] = '[' . __('Subtask') . '] ' . $task->title;
+            $this->data['title'] = '['.__('Subtask').'] '.$task->title;
             $this->data['client'] = $task->client_id;
             $this->data['project'] = $task->project_id;
             $this->data['parent_task'] = $task->id;
@@ -26,5 +26,4 @@ class CreateTask extends CreateRecord
             $this->redirectUrl = URL::previous();
         }
     }
-
 }

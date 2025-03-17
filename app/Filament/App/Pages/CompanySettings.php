@@ -8,7 +8,6 @@ use App\Filament\App\Resources\TaskResource;
 use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Quadrubo\FilamentModelSettings\Pages\Contracts\HasModelSettings;
 use Quadrubo\FilamentModelSettings\Pages\ModelSettingsPage;
@@ -140,7 +139,7 @@ class CompanySettings extends ModelSettingsPage implements HasModelSettings
                                             ];
                                         })->toArray()
                                 )
-                                ->columns(2)
+                                ->columns(2),
                         ]),
 
                     Forms\Components\Tabs\Tab::make('Finance')
@@ -160,9 +159,8 @@ class CompanySettings extends ModelSettingsPage implements HasModelSettings
                         ->schema([
                             Forms\Components\TextInput::make(CompanySettingsEnum::DOCS_INVOICE_NUMBER_FORMAT->value)
                                 ->translateLabel()
-                                ->default(fn() => 'ym00'), // TODO this should come from enum maybe
+                                ->default(fn () => 'ym00'), // TODO this should come from enum maybe
                         ]),
-
 
                 ]),
 

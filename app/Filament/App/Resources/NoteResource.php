@@ -91,7 +91,7 @@ class NoteResource extends Resource
                                             ->placeholder('url')
                                             ->required()
                                             ->prefixAction(
-                                                fn($state) => Forms\Components\Actions\Action::make('url')
+                                                fn ($state) => Forms\Components\Actions\Action::make('url')
                                                     ->url($state)
                                                     ->openUrlInNewTab()
                                                     ->icon('heroicon-o-link')
@@ -145,7 +145,7 @@ class NoteResource extends Resource
                                             ->live(),
 
                                         MonacoEditor::make('content')
-                                            ->language(fn($get) => ($get('language') ?? 'html'))
+                                            ->language(fn ($get) => ($get('language') ?? 'html'))
                                             ->disablePreview(true)
                                             ->hideFullScreenButton()
                                             ->hiddenLabel(),
@@ -191,7 +191,7 @@ class NoteResource extends Resource
                             ->relationship(
                                 'project',
                                 'name',
-                                fn(Builder $query, Forms\Get $get) => $query->byClient($get('client'))->orderBy('name')
+                                fn (Builder $query, Forms\Get $get) => $query->byClient($get('client'))->orderBy('name')
                             )
                             ->searchable()->preload(),
                     ])

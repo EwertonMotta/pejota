@@ -154,11 +154,9 @@ class Task extends Model
     /**
      * Postpones the specified field by the given interval.
      *
-     * @param string $field The name of the field to be postponed.
-     * @param string $interval The interval by which the field should be postponed.
-     * @param bool $fromNow Whether to postpone from now or from the current value of the field.
-     *
-     * @return void
+     * @param  string  $field  The name of the field to be postponed.
+     * @param  string  $interval  The interval by which the field should be postponed.
+     * @param  bool  $fromNow  Whether to postpone from now or from the current value of the field.
      */
     public function postpone(string $field, string $interval, bool $fromNow = true): void
     {

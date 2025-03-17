@@ -5,7 +5,6 @@ namespace App\Filament\App\Resources;
 use App\Enums\MenuGroupsEnum;
 use App\Enums\MenuSortEnum;
 use App\Filament\App\Resources\AccountResource\Pages;
-use App\Filament\App\Resources\AccountResource\RelationManagers;
 use App\Helpers\PejotaHelper;
 use App\Models\Account;
 use Filament\Forms;
@@ -13,8 +12,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AccountResource extends Resource
 {

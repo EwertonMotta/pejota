@@ -151,14 +151,14 @@ class ClientResource extends Resource
                             Action::make('edit')
                                 ->translateLabel()
                                 ->url(
-                                    fn(Model $record) => "{$record->id}/edit"
+                                    fn (Model $record) => "{$record->id}/edit"
                                 )
                                 ->icon('heroicon-o-pencil'),
 
                             Action::make('back')
                                 ->translateLabel()
                                 ->url(
-                                    fn(Model $record) => './.'
+                                    fn (Model $record) => './.'
                                 )
                                 ->icon('heroicon-o-chevron-left')
                                 ->color(Color::Neutral),

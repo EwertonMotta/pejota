@@ -6,7 +6,7 @@ use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 
-enum InvoiceStatusEnum: string implements HasLabel, HasColor, HasIcon
+enum InvoiceStatusEnum: string implements HasColor, HasIcon, HasLabel
 {
     case DRAFT = 'draft';
     case SENT = 'sent';
@@ -37,5 +37,4 @@ enum InvoiceStatusEnum: string implements HasLabel, HasColor, HasIcon
             self::CANCELED => 'heroicon-o-x-circle',
         };
     }
-
 }
